@@ -108,6 +108,7 @@ def package(tag):
         for name, source in [(n, EXTENSION / n) for n in FILES] + [('LICENSE', ROOT / 'LICENSE'), ('README.md', ROOT / 'README.md')]:
             entry = zipfile.ZipInfo(name, ENTRY_TIME)
             entry.compress_type = zipfile.ZIP_DEFLATED
+            entry.create_system = 3  # Unix, whatever the build host is
             entry.external_attr = ENTRY_MODE
             stream.writestr(entry, source.read_bytes())
     with zipfile.ZipFile(archive) as stream:
