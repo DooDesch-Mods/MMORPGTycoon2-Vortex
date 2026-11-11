@@ -1,0 +1,76 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release tag; must equal v plus the version in extension/info.json
+        required: true
+        type: string
+      publish:
+        description: Create the GitHub release and upload to Nexus; off only builds and checks
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write # Create the GitHub release.
+    concurrency:
+      group: release
+      cancel-in-progress: false
+    env:
+      TAG: ${{ inputs.tag || github.ref_name }}
+      PUBLISH: ${{ github.event_name == 'push' || inputs.publish }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test test/
+      - name: Build the release ZIP
+        id: build
+        run: python3 tools/release.py package --tag "$TAG"
+      - name: Check the Nexus destination
+        id: nexus
+        env:
+          NEXUSMODS_API_KEY: ${{ secrets.NEXUSMODS_API_KEY }}
+        run: python3 tools/release.py nexus
+      - name: Create GitHub release
+        if: env.PUBLISH == 'true'
+        run: |
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            echo "info: GitHub release $TAG exists; not changed"
+          else
+            gh release create "$TAG" "${{ steps.build.outputs.filename }}" dist/SHA256SUMS.txt --repo "$GITHUB_REPOSITORY" \
+              --verify-tag --title "${{ steps.build.outputs.title }}" --notes-file dist/notes.md
+          fi
+      - name: Upload file version
+        id: upload
+        if: env.PUBLISH == 'true' && steps.nexus.outputs.status == 'ready'
+        uses: Nexus-Mods/upload-action@98532f7670c27cbecc78fae03fa3e278147827e2 # v1.0.0-beta.11
+        with:
+          api_key: ${{ secrets.NEXUSMODS_API_KEY }}
+          file_id: '8170257'
+          mod_id: '9856949946785'
+          filename: ${{ steps.build.outputs.filename }}
+          version: ${{ steps.build.outputs.version }}
+          display_name: MMORPG Tycoon 2 Vortex Extension
+          description: ${{ steps.build.outputs.description }}
+          category: main
+          archive_existing_version: true
+          update_mod_version: true
+          primary_mod_manager_download: true
+          allow_mod_manager_download: true
+      - name: Complete Nexus changelog
+        if: env.PUBLISH == 'true' && (steps.nexus.outputs.status == 'already-present' || steps.upload.outcome == 'success')
+        env:
+          NEXUSMODS_API_KEY: ${{ secrets.NEXUSMODS_API_KEY }}
+        run: python3 tools/release.py changelog
