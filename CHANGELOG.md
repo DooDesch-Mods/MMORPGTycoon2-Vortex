@@ -2,6 +2,10 @@
 
 Versions follow the extension version in `extension/info.json`. Releases before 0.2.0 were published from the [MT2 Mod Framework repository](https://github.com/DooDesch-Mods/MMORPGTycoon2-ModFramework) as `vortex-v*` tags.
 
+## 0.2.1
+
+- The extension now lives in its own repository, [MMORPGTycoon2-Vortex](https://github.com/DooDesch-Mods/MMORPGTycoon2-Vortex). README and links are updated; the extension itself is unchanged from 0.2.0.
+
 ## 0.2.0
 
 ### Changed
