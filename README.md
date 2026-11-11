@@ -41,7 +41,7 @@ Disable the mods and purge in Vortex. Vortex removes the files it deployed. `<ga
 ## Development
 
 ```powershell
-node --test test/
+node --test
 python tools/release.py package
 ```
 

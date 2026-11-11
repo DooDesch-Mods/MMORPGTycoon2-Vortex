@@ -5,7 +5,7 @@ Vortex game extension for MMORPG Tycoon 2 (`extension/index.js`, plain CommonJS,
 ## Commands
 
 ```powershell
-node --test test/                  # extension tests
+node --test                  # extension tests
 python tools/release.py package    # build dist/ (ZIP, SHA256SUMS.txt, notes)
 ```
 

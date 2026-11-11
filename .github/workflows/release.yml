@@ -34,7 +34,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - run: node --test test/
+      - run: node --test
       - name: Build the release ZIP
         id: build
         run: python3 tools/release.py package --tag "$TAG"
