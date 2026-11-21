@@ -56,6 +56,12 @@ test('registers the game and one installer, and warns after a deploy without the
   assert.deepEqual(notices, ['mt2-runtime-missing']);
 });
 
+test('turns off symlink deployment, which the Framework refuses', () => {
+  let registered;
+  extension.default({api, once: () => {}, registerGame: game => { registered = game; }, registerInstaller: () => {}});
+  assert.deepEqual(registered.compatible, {symlinks: false});
+});
+
 test('runtime goes to the game folder with an mt2fw.json for the profile', () => {
   const result = extension.install(api, ['Runtime/', 'Runtime/framework-package.json', 'Runtime/WSOCK32.dll', 'Runtime/mt2fw/core.lua'], root);
   assert.deepEqual(destinations(result), ['framework-package.json', 'WSOCK32.dll', path.join('mt2fw', 'core.lua'), 'mt2fw.json']);

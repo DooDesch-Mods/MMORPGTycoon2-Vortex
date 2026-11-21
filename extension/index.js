@@ -95,6 +95,8 @@ function main(context) {
     id: GAME_ID,
     name: 'MMORPG Tycoon 2',
     mergeMods: true,
+    // The Framework refuses symlinked mod files, so Vortex must never pick symlink deployment.
+    compatible: {symlinks: false},
     queryArgs: {steam: [{id: STEAM_APP_ID}]},
     queryModPath: () => '.',
     logo: 'gameart.png',
