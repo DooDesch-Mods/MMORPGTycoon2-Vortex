@@ -67,26 +67,6 @@ def plain(markdown):
     return re.sub(r'^#{1,6}\s+', '', text, flags=re.M).strip()
 
 
-def bbcode(markdown):
-    """Headings become bold lines, bullets become [list] items; the notes use no nested lists."""
-    text = re.sub(r'\[([^\]]+)\]\((https?://[^)]+)\)', r'[url=\2]\1[/url]', markdown)
-    text = re.sub(r'\*\*(.+?)\*\*', r'[b]\1[/b]', text)
-    text = re.sub(r'`([^`]+)`', r'\1', text)
-    result, in_list = [], False
-    for line in text.splitlines():
-        bullet = re.match(r'^[-*]\s+(.+)', line)
-        if bullet and not in_list:
-            result.append('[list]')
-        if not bullet and in_list:
-            result.append('[/list]')
-        in_list = bool(bullet)
-        heading = re.match(r'^#{1,6}\s+(.+)$', line)
-        result.append('[*]' + bullet[1] if bullet else f'[b]{heading[1]}[/b]' if heading else line)
-    if in_list:
-        result.append('[/list]')
-    return '\n'.join(result).strip()
-
-
 def package(tag):
     info = json.loads((EXTENSION / 'info.json').read_text(encoding='utf-8'))
     version = info['version']
@@ -119,7 +99,8 @@ def package(tag):
     (DIST / 'notes.md').write_text(notes + '\n', encoding='utf-8')
     (DIST / 'notes.plain.txt').write_text(plain(notes) + '\n', encoding='utf-8')
     output({'version': version, 'filename': str(archive), 'title': f'MMORPG Tycoon 2 Vortex Extension {version}',
-            'description': bbcode(notes)})
+            # The Nexus file description has a short length limit; the full notes go to the Nexus changelog.
+            'description': (ROOT / 'listing' / 'summary.txt').read_text(encoding='utf-8').strip()})
     log('info', f'packaged {archive.name}, {archive.stat().st_size} bytes, sha256 {digest}')
     return version
 
