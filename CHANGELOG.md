@@ -2,6 +2,16 @@
 
 Versions follow the extension version in `extension/info.json`. Releases before 0.2.0 were published from the [MT2 Mod Framework repository](https://github.com/DooDesch-Mods/MMORPGTycoon2-ModFramework) as `vortex-v*` tags.
 
+## 0.2.2
+
+### Fixed
+
+- Vortex no longer offers symlink deployment for MMORPG Tycoon 2. The Framework refuses symlinked mod files, so every mod showed as inactive with "Symbolic links are not allowed".
+
+### Install
+
+If your mods show that error, open Vortex **Settings > Mods**, move the **Mod Staging Folder** to the game's drive, set **Deployment Method** to **Hardlink Deployment** and deploy.
+
 ## 0.2.1
 
 - The extension now lives in its own repository, [MMORPGTycoon2-Vortex](https://github.com/DooDesch-Mods/MMORPGTycoon2-Vortex). README and links are updated; the extension itself is unchanged from 0.2.0.

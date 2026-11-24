@@ -49,6 +49,7 @@ Already updated without purging? Close the game and delete [font=Courier New]WSO
 
 [size=5][b]Good to know[/b][/size]
 [list]
+[*]Staging folder on another drive, or mods inactive with "Symbolic links are not allowed"? In Vortex [b]Settings > Mods[/b], move the [b]Mod Staging Folder[/b] to the game's drive, set [b]Deployment Method[/b] to [b]Hardlink Deployment[/b] and deploy.
 [*]Moved the game folder? Set the new location in Vortex, reinstall the Runtime (right-click, [b]Reinstall[/b]) and deploy.
 [*]The Vortex log lists every install step with the prefix [font=Courier New]MT2:[/font].
 [/list]

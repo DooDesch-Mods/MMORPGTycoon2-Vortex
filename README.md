@@ -18,7 +18,7 @@ Every install step and every failure is written to the Vortex log with the prefi
 
 1. Download `MMORPGTycoon2-Vortex-<version>.zip` from [Nexus](https://www.nexusmods.com/site/mods/2465) or the [GitHub releases](https://github.com/DooDesch-Mods/MMORPGTycoon2-Vortex/releases).
 2. In Vortex **Extensions**, use **Drop File(s)** to install the ZIP, then restart Vortex.
-3. Manage **MMORPG Tycoon 2**. The staging folder must be on the same drive as the game.
+3. Manage **MMORPG Tycoon 2**. The staging folder must be on the same drive as the game. If it is not, open **Settings > Mods**, move the **Mod Staging Folder** to the game's drive and set **Deployment Method** to **Hardlink Deployment**.
 4. Install the **MT2 Mod Framework Runtime** ZIP, then your mod ZIPs. Enable them and deploy with the game closed.
 5. Start the game through Steam. F10 opens the framework **Mods** menu.
 
